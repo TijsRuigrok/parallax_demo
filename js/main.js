@@ -2,46 +2,33 @@ let lastScrollPos = window.scrollY;
 let scale = 1;
 let x = -1;
 
-let titleSection = document.querySelector(".title-section");
-let titleSectionBottom = titleSection.scrollHeight;
-let articleSection = document.querySelector(".article-section");
-let articleSectionTop = articleSection.getBoundingClientRect().top;
+window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+}
 
 document.addEventListener("scroll", function(e) {
     let currentScrollPos = window.scrollY;
+    let heroSection = document.querySelector(".hero-section");
+    let heroSectionPos = heroSection.getBoundingClientRect();
     let imgFront = document.querySelector(".hero-section__img-front");
 
-    if (currentScrollPos > titleSectionBottom && currentScrollPos < articleSectionTop - titleSectionBottom) {
+    if (currentScrollPos > heroSectionPos.top && currentScrollPos < heroSectionPos.bottom) {
 
-        if(currentScrollPos > lastScrollPos && scale <= 64) {
-            scale = scale * 2;
+        let heroSectionHeight = heroSection.offsetHeight;
+
+        //scale += (currentScrollPos - lastScrollPos) * (1.3 - 1) / heroSectionHeight;
+        scale = 1 + (1.3 - 1) * (currentScrollPos - heroSectionPos.top) / heroSectionHeight
+
+        if (scale > 1.3) {
+            scale = 1.3;
         }
 
-        else {
-            scale = scale / 2;
+        else if (scale < 1)
+        {
+            scale = 1;
         }
 
         imgFront.style.transform = `scale(${scale})`;
+        lastScrollPos = currentScrollPos;
     }
-
-
-    //
-    // let title = document.querySelector(".hero-section .hero-title");
-    // if (currentScrollPos > lastScrollPos) {
-    //     if (x >= -150) {
-    //         x = x * 1.5;
-    //     }
-    // } else {
-    //     if (x <= -1.5) {
-    //         x = x / 1.5;
-    //     }
-    // }
-    //
-    //     title.style.transform = `translateX(${x}%)`;
-    //     title.style.opacity = 1;
-    //  else {
-    //     let title = document.querySelector(".hero-section .hero-title");
-    //     title.style.opacity = 0;
-    // }
-    // lastScrollPos = currentScrollPos;
 });
