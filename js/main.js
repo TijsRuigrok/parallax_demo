@@ -1,31 +1,69 @@
-let lastScrollPos = window.scrollY;
-let scale = 1;
-let x = -1;
+const heroSection = document.querySelector(".hero-section");
+const imgFront = document.querySelector(".hero-section__img-front");
 
-window.onbeforeunload = function () {
+let startSize = 1;
+let endSize = 1.2;
+
+let startYCut = 0;
+let endYCut = 400;
+
+let startY;
+let endY;
+
+let maxSize;
+let minSize;
+
+let growthType = "Linear";  // Linear, Quadratic or Exponential
+
+let lastScrollPos = window.scrollY;
+let scale = startSize;
+
+window.onload = function () {
+    maxSize = Math.max(startSize, endSize);
+    minSize = Math.min(startSize, endSize);
+    imgFront.style.transform = `scale(${scale})`;
     window.scrollTo(0, 0);
 }
 
 document.addEventListener("scroll", function(e) {
     let currentScrollPos = window.scrollY;
-    let heroSection = document.querySelector(".hero-section");
     let heroSectionPos = heroSection.getBoundingClientRect();
-    let imgFront = document.querySelector(".hero-section__img-front");
 
-    if (currentScrollPos > heroSectionPos.top && currentScrollPos < heroSectionPos.bottom) {
+    startY = heroSectionPos.top + startYCut;
+    endY = heroSectionPos.bottom - endYCut;
 
-        let heroSectionHeight = heroSection.offsetHeight;
+    if (currentScrollPos > startY && currentScrollPos < endY) {
 
-        //scale += (currentScrollPos - lastScrollPos) * (1.3 - 1) / heroSectionHeight;
-        scale = 1 + (1.3 - 1) * (currentScrollPos - heroSectionPos.top) / heroSectionHeight
+        let heroSectionHeight = heroSection.offsetHeight - endYCut - startYCut;
 
-        if (scale > 1.3) {
-            scale = 1.3;
+        switch (growthType) {
+            case "Linear":
+                scale = startSize + (endSize - startSize) *
+                    (currentScrollPos - startY) / heroSectionHeight;
+                break;
+
+            case "Quadratic":
+                scale = startSize + (endSize - startSize) *
+                    Math.pow((currentScrollPos - startY) / heroSectionHeight, 2);
+                break;
+
+            case "Exponential":
+                scale = startSize * Math.pow(endSize / startSize,(currentScrollPos - startY) / heroSectionHeight);
+                break;
+
+            // default is linear
+            default:
+                scale = startSize + (endSize - startSize) *
+                    (currentScrollPos - startY) / heroSectionHeight;
         }
 
-        else if (scale < 1)
+        if (scale > maxSize) {
+            scale = maxSize;
+        }
+
+        else if (scale < minSize)
         {
-            scale = 1;
+            scale = minSize;
         }
 
         imgFront.style.transform = `scale(${scale})`;

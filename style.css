@@ -3,16 +3,21 @@
     padding: 0;
 }
 
+body {
+    background-color: lightgray;
+}
+
 section {
+    height: 400px;
     width: 80%;
     margin: 0 auto;
-    background-color: darkgrey;
+    background-color: white;
 }
 
 .hero-section {
-    width: 100%;
-    height: 1200px;
+    height: 900px;
     position: relative;
+    overflow: hidden;
 }
 
 .hero-section img {
@@ -20,24 +25,12 @@ section {
     position: absolute;
     bottom: 0;
     left: 0;
-}
-
-.hero-section__img-back {
-
-}
-
-.hero-section__img-middle {
     /*opacity: 0;*/
 }
 
-.hero-section__img-front {
-    /*opacity: 0;*/
-}
-
-.top-section {
-    height: 1200px;
-}
-
-.bottom-section {
-    height: 1200px;
+.hero-section h2 {
+    /*position: relative;*/
+    /*z-index: 1;*/
+    /*color: ;*/
+    /*font-size: 100px;*/
 }
