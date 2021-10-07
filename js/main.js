@@ -1,72 +1,98 @@
 const heroSection = document.querySelector(".hero-section");
 const imgFront = document.querySelector(".hero-section__img-front");
-
-let startSize = 1;
-let endSize = 1.2;
-
-let startYCut = 0;
-let endYCut = 400;
-
-let startY;
-let endY;
-
-let maxSize;
-let minSize;
-
-let growthType = "Linear";  // Linear, Quadratic or Exponential
-
-let lastScrollPos = window.scrollY;
-let scale = startSize;
+const imgMiddle = document.querySelector(".hero-section__img-middle");
+const imgBack = document.querySelector(".hero-section__img-back");
 
 window.onload = function () {
-    maxSize = Math.max(startSize, endSize);
-    minSize = Math.min(startSize, endSize);
-    imgFront.style.transform = `scale(${scale})`;
-    window.scrollTo(0, 0);
+    scrollAnimationScale("Quadratic", heroSection, imgFront, 1, 1.1, -400, 400);
+    scrollAnimationScale("Quadratic", heroSection, imgMiddle, 1, 1.05, -200, 400);
+    scrollAnimationOpacity("Quadratic", heroSection, imgBack, 1, 0, 0, 400);
 }
 
-document.addEventListener("scroll", function(e) {
-    let currentScrollPos = window.scrollY;
-    let heroSectionPos = heroSection.getBoundingClientRect();
+function scrollAnimationScale (growthType, targetContainer, targetElement, startScale, endScale, startYCut, endYCut) {
+    let scale = startScale;
+    targetElement.style.transform = `scale(${scale})`;
 
-    startY = heroSectionPos.top + startYCut;
-    endY = heroSectionPos.bottom - endYCut;
+    document.addEventListener("scroll", function () {
+        let scrollPos = window.scrollY;
+        let targetContainerPos = heroSection.getBoundingClientRect();
+        let startY = targetContainerPos.top + startYCut;
+        let endY = targetContainerPos.bottom - endYCut;
 
-    if (currentScrollPos > startY && currentScrollPos < endY) {
+        scale = getGrowthValue(growthType, startScale, endScale, startY, endY, scrollPos);
+        targetElement.style.transform = `scale(${scale})`;
+    });
 
-        let heroSectionHeight = heroSection.offsetHeight - endYCut - startYCut;
+    // setInterval(function () {
+    //
+    //     let targetElementScale = targetElement.getBoundingClientRect().width / targetElement.offsetWidth;
+    //
+    //     let a = 1;
+    //
+    //     if (scale - targetElementScale >= a) {
+    //         targetElement.style.transform = `scale(${targetElementScale + a})`;
+    //     }
+    //     else if (scale - targetElementScale <= -a) {
+    //         targetElement.style.transform = `scale(${targetElementScale - a})`;
+    //     }
+    //     else {
+    //         targetElement.style.transform = `scale(${scale})`;
+    //     }
+    // });
+}
 
-        switch (growthType) {
-            case "Linear":
-                scale = startSize + (endSize - startSize) *
-                    (currentScrollPos - startY) / heroSectionHeight;
-                break;
+function scrollAnimationOpacity (growthType, targetContainer, targetElement, startOpacity, endOpacity, startYCut, endYCut) {
+    let newOpacity = startOpacity;
+    targetElement.style.opacity = newOpacity;
 
-            case "Quadratic":
-                scale = startSize + (endSize - startSize) *
-                    Math.pow((currentScrollPos - startY) / heroSectionHeight, 2);
-                break;
+    document.addEventListener("scroll", function () {
+        let scrollPos = window.scrollY;
+        let targetContainerPos = heroSection.getBoundingClientRect();
+        let startY = targetContainerPos.top + startYCut;
+        let endY = targetContainerPos.bottom - endYCut;
 
-            case "Exponential":
-                scale = startSize * Math.pow(endSize / startSize,(currentScrollPos - startY) / heroSectionHeight);
-                break;
+        newOpacity = getGrowthValue(growthType, startOpacity, endOpacity, startY, endY, scrollPos);
+        //targetElement.style.opacity = newOpacity;
+    });
 
-            // default is linear
-            default:
-                scale = startSize + (endSize - startSize) *
-                    (currentScrollPos - startY) / heroSectionHeight;
+    setInterval(function () {
+        if (newOpacity - targetElement.style.opacity >= 0.01) {
+            targetElement.style.opacity += 0.01;
         }
-
-        if (scale > maxSize) {
-            scale = maxSize;
+        else if (newOpacity - targetElement.style.opacity <= -0.01) {
+            targetElement.style.opacity = targetElement.style.opacity+-0.01;
         }
-
-        else if (scale < minSize)
-        {
-            scale = minSize;
+        else {
+            targetElement.style.opacity = newOpacity;
         }
+    });
+}
 
-        imgFront.style.transform = `scale(${scale})`;
-        lastScrollPos = currentScrollPos;
+function getGrowthValue (growthType, startState, endState, startPos, endPos, pos) {
+
+    if (pos <= startPos) {
+        return startState;
     }
-});
+
+    else if(pos >= endPos) {
+        return endState;
+    }
+
+    switch (growthType) {
+        case "Linear":
+            return startState + (endState - startState) *
+                (pos - startPos) / (endPos - startPos);
+
+        case "Quadratic":
+            return startState + (endState - startState) *
+                Math.pow((pos - startPos) / (endPos - startPos), 2);
+
+        case "Exponential":
+            return startState * Math.pow(endState / startState, (pos - startPos) / (endPos - startPos));
+
+        // default is linear
+        default:
+            return startState + (endState - startState) *
+                (pos - startPos) / (endPos - startPos);
+    }
+}
