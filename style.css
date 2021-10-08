@@ -16,8 +16,10 @@ section {
 
 .hero-section {
     height: 900px;
-    position: relative;
+    position: sticky;
+    top: 0;
     overflow: hidden;
+    z-index: -100000;
 }
 
 .hero-section img {
@@ -25,4 +27,18 @@ section {
     position: absolute;
     bottom: 0;
     left: 0;
+}
+
+.hero-section2 {
+    height: 900px;
+    position: relative;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.hero-section2 img {
+    width: 100px;
+    position: absolute;
+    top: 50%;
+    display: none;
 }
