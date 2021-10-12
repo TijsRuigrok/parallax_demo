@@ -4,42 +4,67 @@ const imgMiddle = document.querySelector(".hero-section__img-middle");
 const imgBack = document.querySelector(".hero-section__img-back");
 
 const heroSection2 = document.querySelector(".hero-section2");
-const imgBack2 = document.querySelector(".hero-section__img-front2");
+const imgBack2 = document.querySelector(".hero-section2__img-back");
+const imgSun = document.querySelector(".hero-section2__img-sun");
+const imgFront2 = document.querySelector(".hero-section2__img-front");
+
+const imgTrees = document.querySelector(".hero-section2__img-trees");
+const imgReflection = document.querySelector(".hero-section2__img-reflection");
 
 window.onload = function () {
-    // scrollAnimationScale("Quadratic", heroSection, imgFront, 1, 1.2, -400, 400);
-    scrollAnimationScale("Quadratic", heroSection, imgMiddle, 1, 1.1, -200, 400);
-    scrollAnimationScale("Quadratic", heroSection, imgBack, 1, 1.05, 0, 400);
-    scrollAnimationScale("Linear", heroSection, imgFront, 1, 1.2, 0, 200);
+    scrollAnimationScale("Quadratic", true, heroSection, imgBack, 1, 1.05, 0, 400);
+    scrollAnimationScale("Quadratic", true, heroSection, imgMiddle, 1, 1.1, -200, 400);
+    scrollAnimationScale("Linear", true, heroSection, imgFront, 1.05, 1.2, 0, 400);
+
+    scrollAnimationPosition(
+        "Quadratic",
+        true,
+        heroSection2, imgSun,
+        50, 60,
+        40, 60,
+        0, 400);
+
+    scrollAnimationScale(
+        "Linear",
+        true,
+        heroSection2, imgSun,
+        1.4, 1.4,
+        0, 400);
+
+    scrollAnimationOpacity(
+        "Linear",
+        true,
+        heroSection2, imgSun,
+        1, 0,
+        0, 600);
+
+    scrollAnimationOpacity(
+        "Quadratic",
+        true,
+        heroSection2, imgBack2,
+        1, 0,
+        0, 600);
 }
 
 function getTopPos(element) {
-    var rect = element.getBoundingClientRect(),
+    let rect = element.getBoundingClientRect(),
         scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     return rect.top + scrollTop;
 }
 
-function scrollAnimationScale (growthType, targetContainer, targetElement, startScale, endScale, startYCut, endYCut,) {
+function scrollAnimationScale (growthType = "Linear", sticky = false,  targetContainer, targetElement, startScale, endScale, startYCut, endYCut,) {
     let scale = startScale;
     targetElement.style.transform = `scale(${scale})`;
 
     document.addEventListener("scroll", function () {
-        targetContainer.style.position = "relative";
 
-        let targetContainerPos = targetContainer.getBoundingClientRect();
+        if (sticky) targetContainer.style.position = "relative";
+
         let startY = getTopPos(targetContainer) + startYCut;
         let endY = getTopPos(targetContainer) + endYCut;
         let scrollPos = window.scrollY;
 
-
-        //console.log(scrollPos)
-        //if(scrollPos < endY) {
-        targetContainer.style.position = "sticky";
-        //}
-        //else {
-        //    targetContainer.style.position = "relative";
-        //    scrollPos = endY;
-        //}
+        if (sticky) targetContainer.style.position = "sticky";
 
         scale = getGrowthValue(growthType, startScale, endScale, startY, endY, scrollPos);
         targetElement.style.transform = `scale(${scale})`;
@@ -63,34 +88,57 @@ function scrollAnimationScale (growthType, targetContainer, targetElement, start
     // });
 }
 
-function scrollAnimationOpacity (growthType, targetContainer, targetElement, startOpacity, endOpacity, startYCut, endYCut) {
+function scrollAnimationOpacity (growthType, sticky, targetContainer, targetElement, startOpacity, endOpacity, startYCut, endYCut) {
     let opacity = startOpacity;
     targetElement.style.opacity = opacity;
 
     document.addEventListener("scroll", function () {
         let targetContainerPos = targetContainer.getBoundingClientRect();
-        let startY = targetContainerPos.top + startYCut;
-        let endY = targetContainerPos.bottom - endYCut;
+
+        if (sticky) targetContainer.style.position = "relative";
+
+        let startY = getTopPos(targetContainer) + startYCut;
+        let endY = getTopPos(targetContainer) + endYCut;
         let scrollPos = window.scrollY;
+
+        if (sticky) targetContainer.style.position = "sticky";
 
         opacity = getGrowthValue(growthType, startOpacity, endOpacity, startY, endY, scrollPos);
         targetElement.style.opacity = opacity;
     });
 }
 
-function scrollAnimationPosition (growthType, targetContainer, targetElement, startPosition, endPosition, startYCut, endYCut) {
-    let position = startPosition;
-    targetElement.style.left = position + '%';
+function scrollAnimationPosition (growthType, sticky, targetContainer, targetElement, startPositionX, endPositionX, startPositionY, endPositionY, startYCut, endYCut,) {
+    let positionX = startPositionX;
+    let positionY = startPositionY;
+
+    let targetElementHeight = targetElement.getBoundingClientRect().height;
+    let targetElementWidth = targetElement.getBoundingClientRect().width;
+
+    targetElement.style.marginTop = -targetElementHeight / 2 + 'px';
+    targetElement.style.marginLeft = -targetElementWidth / 2 + 'px';
+
+    targetElement.style.left = positionX + '%';
+    targetElement.style.top = positionY + '%';
+
 
     document.addEventListener("scroll", function () {
+        if (sticky) targetContainer.style.position = "relative";
+
+        let startY = getTopPos(targetContainer) + startYCut;
+        let endY = getTopPos(targetContainer) + endYCut;
         let scrollPos = window.scrollY;
-        let targetContainerPos = targetContainer.getBoundingClientRect();
 
-        let startY = targetContainerPos.top + startYCut;
-        let endY = targetContainerPos.bottom - endYCut;
+        if (sticky) targetContainer.style.position = "sticky";
 
-        position = getGrowthValue(growthType, startPosition, endPosition, startY, endY, scrollPos);
-        targetElement.style.left = position + '%';
+        positionX = getGrowthValue(growthType, startPositionX, endPositionX, startY, endY, scrollPos);
+        positionY = getGrowthValue(growthType, startPositionY, endPositionY, startY, endY, scrollPos);
+
+        targetElement.style.left = positionX + '%';
+        targetElement.style.top = positionY + '%';
+
+        targetElement.style.marginTop = -targetElementHeight / 2 + 'px';
+        targetElement.style.marginLeft = -targetElementWidth / 2 + 'px';
     });
 }
 
