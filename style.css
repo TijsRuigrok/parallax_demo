@@ -73,6 +73,19 @@ section {
     height: 50%;
 }
 
-.hero-section2__img-trees {
+.hero-section3 {
+    height: 700px;
+    position: relative;
+    top: 0;
+    overflow: hidden;
+    z-index: -100000;
+}
+
+.hero-section3 img {
+    position: absolute;
     width: 100%;
+}
+
+.hero-section3__img-front {
+    top: 0;
 }

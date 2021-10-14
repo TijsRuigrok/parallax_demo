@@ -6,15 +6,22 @@ const imgBack = document.querySelector(".hero-section__img-back");
 const heroSection2 = document.querySelector(".hero-section2");
 const imgBack2 = document.querySelector(".hero-section2__img-back");
 const imgSun = document.querySelector(".hero-section2__img-sun");
-const imgFront2 = document.querySelector(".hero-section2__img-front");
 
-const imgTrees = document.querySelector(".hero-section2__img-trees");
-const imgReflection = document.querySelector(".hero-section2__img-reflection");
+// const imgFront2 = document.querySelector(".hero-section2__img-front");
+// const imgTrees = document.querySelector(".hero-section2__img-trees");
+// const imgReflection = document.querySelector(".hero-section2__img-reflection");
+
+const heroSection3 = document.querySelector(".hero-section3");
+const imgBack3 = document.querySelector(".hero-section3__img-back");
+const imgFront3 = document.querySelector(".hero-section3__img-front");
+
 
 window.onload = function () {
     scrollAnimationScale("Quadratic", true, heroSection, imgBack, 1, 1.05, 0, 400);
     scrollAnimationScale("Quadratic", true, heroSection, imgMiddle, 1, 1.1, -200, 400);
     scrollAnimationScale("Linear", true, heroSection, imgFront, 1.05, 1.2, 0, 400);
+
+    // hero 2
 
     scrollAnimationPosition(
         "Quadratic",
@@ -44,6 +51,31 @@ window.onload = function () {
         heroSection2, imgBack2,
         1, 0,
         0, 600);
+
+    // hero 3
+
+    scrollAnimationPosition(
+        "Quadratic",
+        true,
+        heroSection3, imgFront3,
+        50, 50,
+        0, 30,
+        0, 200);
+
+    scrollAnimationScale(
+        "Quadratic",
+        true,
+        heroSection3, imgFront3,
+        0.8, 0.9,
+        0, 200);
+
+    scrollAnimationOpacity(
+        "Quadratic",
+        true,
+        heroSection3, imgFront3,
+        0, 1,
+        0, 200);
+
 }
 
 function getTopPos(element) {
@@ -120,7 +152,6 @@ function scrollAnimationPosition (growthType, sticky, targetContainer, targetEle
 
     targetElement.style.left = positionX + '%';
     targetElement.style.top = positionY + '%';
-
 
     document.addEventListener("scroll", function () {
         if (sticky) targetContainer.style.position = "relative";
