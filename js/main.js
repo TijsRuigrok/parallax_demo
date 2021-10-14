@@ -1,15 +1,11 @@
-const heroSection = document.querySelector(".hero-section");
+const heroSection = document.querySelector(".hero-section-landscape");
 const imgFront = document.querySelector(".hero-section__img-front");
 const imgMiddle = document.querySelector(".hero-section__img-middle");
 const imgBack = document.querySelector(".hero-section__img-back");
 
-const heroSection2 = document.querySelector(".hero-section2");
-const imgBack2 = document.querySelector(".hero-section2__img-back");
-const imgSun = document.querySelector(".hero-section2__img-sun");
-const imgFront2 = document.querySelector(".hero-section2__img-front");
-
-const imgTrees = document.querySelector(".hero-section2__img-trees");
-const imgReflection = document.querySelector(".hero-section2__img-reflection");
+const heroSection2 = document.querySelector(".hero-section-sunset");
+const imgBack2 = document.querySelector(".hero-section-sunset__img-back");
+const imgSun = document.querySelector(".hero-section-sunset__img-sun");
 
 window.onload = function () {
     scrollAnimationScale("Quadratic", true, heroSection, imgBack, 1, 1.05, 0, 400);
@@ -120,7 +116,6 @@ function scrollAnimationPosition (growthType, sticky, targetContainer, targetEle
 
     targetElement.style.left = positionX + '%';
     targetElement.style.top = positionY + '%';
-
 
     document.addEventListener("scroll", function () {
         if (sticky) targetContainer.style.position = "relative";

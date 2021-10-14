@@ -1,11 +1,20 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
 }
 
 body {
     background-color: lightgray;
+}
+
+h1 {
+    font-size: 36px;
+    font-family: Arial, sans-serif;
+}
+
+p {
+    font-size: 16px;
+    font-family: Arial, sans-serif;
 }
 
 section {
@@ -13,7 +22,6 @@ section {
     width: 80%;
     margin: 0 auto;
     background-color: white;
-    z-index: -10000000000000;
 }
 
 .hero-section {
@@ -31,48 +39,37 @@ section {
     left: 0;
 }
 
+
+/* -- Articles -------------------------------------------------------------------------- */
+
 .article-section {
     height: 900px;
 }
 
 .article-section h1 {
     padding: 40px 100px 20px 100px;
-    font-size: 36px;
 }
 
 .article-section p {
     padding: 0 100px 20px 100px;
-    font-size: 16px;
 }
 
-.hero-section2 {
-    height: 900px;
-    position: relative;
-    top: 0;
-    overflow: hidden;
-    z-index: -100000;
+
+/* -- Sunset -------------------------------------------------------------------------- */
+
+.hero-section-sunset {
     background-color: dimgrey;
 }
 
-.hero-section2 img {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-}
-
-.hero-section2__img-back {
+.hero-section-sunset__img-back {
     height: 100%;
 }
 
-.hero-section2__img-sun {
-    width: 200px;
+.hero-section-sunset__img-sun {
+    width: 200px !important;
 }
 
-.hero-section2__img-front {
+.hero-section-sunset__img-front {
     width: 100%;
     height: 50%;
-}
-
-.hero-section2__img-trees {
-    width: 100%;
 }
