@@ -1,18 +1,31 @@
 class Animation {
-    get animationFunction() { return this._animationFunction; }
-    get startState() { return this._startState; }
-    get endState() { return this._endState; }
-    get easingType() { return this._easingType; }
-    get durationMs() { return this._durationMS; }
-    get ticks() { return this._ticks; }
 
-    constructor(animationFunction, startState, endState, easingType, durationMS, ticks) {
-        this._animationFunction = animationFunction;
-        this._startState = startState;
-        this._endState = endState;
-        this._easingType = easingType;
-        this._durationMS = durationMS;
-        this._ticks = ticks;
+    #startState;
+    endState;
+    #easingType;
+    #durationMs;
+    #ticks;
+
+    constructor(startState, endState, easingType, durationMS, ticks) {
+        this.#startState = startState;
+        this.endState = endState;
+        this.#easingType = easingType;
+        this.#durationMs = durationMS;
+        this.#ticks = ticks;
+    }
+
+    play () {
+        const delay = this.#durationMs / this.#ticks;
+        let timePassed = 0;
+        let state = this.#startState;
+
+        const interval = setInterval(function () {
+            timePassed += delay;
+            if (state >= this.#endState) clearInterval(interval);
+
+            state = easing(animation.easingType, animation.startState, animation.endState, timePassed, animation.durationMs);
+            animation.animationFunction(targetElement, state);
+        }, delay);
     }
 }
 
